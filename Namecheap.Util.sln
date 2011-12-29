@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Namecheap.Util", "Namecheap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Namecheap.Console", "Namecheap.Console\Namecheap.Console.csproj", "{278E0C19-A274-441C-8428-A732C0529340}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Namecheap.Tests", "Namecheap.Tests\Namecheap.Tests.csproj", "{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{278E0C19-A274-441C-8428-A732C0529340}.Release|Mixed Platforms.Build.0 = Release|x86
 		{278E0C19-A274-441C-8428-A732C0529340}.Release|x86.ActiveCfg = Release|x86
 		{278E0C19-A274-441C-8428-A732C0529340}.Release|x86.Build.0 = Release|x86
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{77D4039E-AEA9-48FA-A86B-1BBDBC8138DE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Namecheap.Tests.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TestBaseDomain" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">derp.de</Value>
+    </Setting>
+    <Setting Name="APIKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">3eb82ec7269149a7bc170b220a2d5971</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
