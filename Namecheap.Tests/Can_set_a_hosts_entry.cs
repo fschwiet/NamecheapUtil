@@ -12,7 +12,7 @@ namespace Namecheap.Tests
                 String.Format("foo{0}.{1}", Guid.NewGuid().ToString().Replace("-", ""),
                     Properties.Settings.Default.TestBaseDomain);
 
-            var namecheapClient = new NamecheapClient(Properties.Settings.Default.APIKey);
+            var namecheapClient = new NamecheapClient(Properties.Settings.Default.APIKey, Properties.Settings.Default.APIUser, true);
 
             when("we assign a hostname", delegate()
             {

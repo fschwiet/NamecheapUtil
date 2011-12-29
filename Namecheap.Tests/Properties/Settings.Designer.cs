@@ -40,5 +40,14 @@ namespace Namecheap.Tests.Properties {
                 return ((string)(this["APIKey"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("fschwiet")]
+        public string APIUser {
+            get {
+                return ((string)(this["APIUser"]));
+            }
+        }
     }
 }

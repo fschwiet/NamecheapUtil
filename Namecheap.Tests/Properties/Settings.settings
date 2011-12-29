@@ -8,5 +8,8 @@
     <Setting Name="APIKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">3eb82ec7269149a7bc170b220a2d5971</Value>
     </Setting>
+    <Setting Name="APIUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">fschwiet</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
