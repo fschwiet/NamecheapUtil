@@ -48,7 +48,7 @@ namespace Namecheap.Tests
                         result.Add(new Tuple<string, string>(GetUniqueDomainName(), "192.168.0.10"));
                     }
 
-                    return result;
+                    return result.ToArray();
                 });
 
                 arrange(delegate()
@@ -59,8 +59,23 @@ namespace Namecheap.Tests
 
                 then("the assignments succeed", delegate()
                 {
-                    foreach (var hostname in aBunchOfHostnames)
-                        expect(() => namecheapClient.GetHostEntry(hostname.Item1) == hostname.Item2);
+                    for(var i = 0; i < aBunchOfHostnames.Length; i++)
+                    {
+                        var hostname = aBunchOfHostnames[i];
+
+                        string hostEntry;
+
+                        try
+                        {
+                            hostEntry = namecheapClient.GetHostEntry(hostname.Item1);
+                        }
+                        catch(Exception e)
+                        {
+                            throw new Exception("Failure loading IP address for host at index " + i);     
+                        }
+
+                        expect(() => hostEntry == hostname.Item2);
+                    }
                 });
             });
 

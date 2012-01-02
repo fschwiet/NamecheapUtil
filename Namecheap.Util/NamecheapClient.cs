@@ -67,8 +67,6 @@ namespace Namecheap.Util
             {
                 var response = client.DownloadString(url);
 
-                Console.WriteLine(response);
-
                 result = XDocument.Parse(response);
                 var value = result.Root.Attribute("Status").Value;
 
