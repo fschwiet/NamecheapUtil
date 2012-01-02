@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Namecheap.Util;
 using NJasmine;
@@ -38,20 +39,28 @@ namespace Namecheap.Tests
             {
                 ignoreBecause("this test takes a long time.");
 
-                arrange(delegate()
+                var aBunchOfHostnames = arrange(() =>
                 {
+                    List<Tuple<string, string>> result = new List<Tuple<string, string>>();
+
                     for(var i = 0; i < 500; i++)
-                        namecheapClient.SetHostEntry(GetUniqueDomainName(), "192.168.0.10");
+                    {
+                        result.Add(new Tuple<string, string>(GetUniqueDomainName(), "192.168.0.10"));
+                    }
+
+                    return result;
                 });
 
-                var lastDomainName = GetUniqueDomainName();
-                var expectedLastIPAddress = "192.168.0.11";
-
-                arrange(() => namecheapClient.SetHostEntry(lastDomainName, expectedLastIPAddress));
-
-                describe("the assignments complete, and we can still set more", delegate()
+                arrange(delegate()
                 {
-                    then_hostname_has_IPAddress(namecheapClient, lastDomainName, expectedLastIPAddress);
+                    foreach(var hostname in aBunchOfHostnames)
+                        namecheapClient.SetHostEntry(hostname.Item1, hostname.Item2);
+                });
+
+                describe("the assignments succeed", delegate()
+                {
+                    foreach (var hostname in aBunchOfHostnames)
+                        then_hostname_has_IPAddress(namecheapClient, hostname.Item1, hostname.Item2);
                 });
             });
 
