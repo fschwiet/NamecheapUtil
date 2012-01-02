@@ -57,10 +57,10 @@ namespace Namecheap.Tests
                         namecheapClient.SetHostEntry(hostname.Item1, hostname.Item2);
                 });
 
-                describe("the assignments succeed", delegate()
+                then("the assignments succeed", delegate()
                 {
                     foreach (var hostname in aBunchOfHostnames)
-                        then_hostname_has_IPAddress(namecheapClient, hostname.Item1, hostname.Item2);
+                        expect(() => namecheapClient.GetHostEntry(hostname.Item1) == hostname.Item2);
                 });
             });
 
