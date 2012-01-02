@@ -9,11 +9,12 @@ namespace Namecheap.Tests
     {
         public override void Specify()
         {
-            var domainName =
-                String.Format("foo{0}.{1}", Guid.NewGuid().ToString().Replace("-", ""),
-                    Properties.Settings.Default.TestBaseDomain);
+            var domainName = GetUniqueDomainName();
 
-            var namecheapClient = new NamecheapClient(Properties.Settings.Default.APIKey, Properties.Settings.Default.APIUser, true);
+            var namecheapClient = new NamecheapClient(
+                Properties.Settings.Default.APIKey, 
+                Properties.Settings.Default.APIUser, 
+                true);
 
             when("we assign a hostname", delegate()
             {
@@ -45,6 +46,12 @@ namespace Namecheap.Tests
                     expect(() => exception.Message == "Error reported by Namecheap webservice (2019166): Domain name not found");
                 });
             });
+        }
+
+        private static string GetUniqueDomainName()
+        {
+            return String.Format("foo{0}.{1}", Guid.NewGuid().ToString().Replace("-", ""),
+                Properties.Settings.Default.TestBaseDomain);
         }
 
         private void then_hostname_has_IPAddress(NamecheapClient namecheapClient, string domainName, string IPAddress)
