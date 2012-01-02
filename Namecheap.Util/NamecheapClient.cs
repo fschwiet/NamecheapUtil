@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Xml.Linq;
 
 namespace Namecheap.Util
 {
@@ -19,47 +20,77 @@ namespace Namecheap.Util
 
         public void SetHostEntry(string hostname, string address)
         {
-            var addressPartsReversed = hostname.Split('.').Reverse();
-            var sld = addressPartsReversed.Skip(1).First();
-            var tld = addressPartsReversed.First();
+            var querystringParameters = StartParametersForCommand("namecheap.domains.dns.setHosts");
 
-            var querystringParameters = GetCommonParameters();
-            querystringParameters.Add("Command", "namecheap.domains.dns.setHosts");
-            querystringParameters.Add("SLD", sld);
-            querystringParameters.Add("TLD", tld);
-            querystringParameters.Add("HostName1", "@");
+            AddSDLandTLDParameters(hostname, querystringParameters);
+            querystringParameters.Add("HostName1", PartsOfDNSRecord.GetSubdomain(hostname));
             querystringParameters.Add("RecordType1", "A");
             querystringParameters.Add("Address1", address);
             querystringParameters.Add("MXPref1", "10");    // only valid for MX records, though sample showed it being set
             querystringParameters.Add("TTL1", "180");
             querystringParameters.Add("EmailType", "OX"); // ?
 
+            var result = GetApiResult(querystringParameters);
+        }
+
+        public string GetHostEntry(string hostname)
+        {
+            var querystringParameters = StartParametersForCommand("namecheap.domains.dns.getHosts");
+            AddSDLandTLDParameters(hostname, querystringParameters);
+
+            var subdomain = PartsOfDNSRecord.GetSubdomain(hostname);
+
+            var result = GetApiResult(querystringParameters);
+
+            var ns = XNamespace.Get("http://api.namecheap.com/xml.response");
+
+            var commandResponse = result.Root.Elements(ns + "CommandResponse").Single();
+            var getHostsResult = commandResponse.Elements(ns + "DomainDNSGetHostsResult").Single();
+            var hosts = getHostsResult.Elements(ns + "host");
+            var host = hosts.Where(h => h.Attribute("Name").Value == subdomain).Single();
+
+            return host.Attribute("Address").Value;
+        }
+
+        private XDocument GetApiResult(QuerystringParameters querystringParameters)
+        {
+            XDocument result;
+
             var url = string.Format("http://{0}/xml.response?{1}", _hostname, querystringParameters.AsQuerystring());
-            Console.WriteLine("url: " + url);
-            using(var client = new WebClient())
+
+            using (var client = new WebClient())
             {
                 var response = client.DownloadString(url);
 
                 Console.WriteLine(response);
+
+                result = XDocument.Parse(response);
+                var value = result.Root.Attribute("Status").Value;
+
+                //if (value != "OK")
+                //    throw new Exception("Namecheap service call failed");
             }
-
-            throw new NotImplementedException();
+            return result;
         }
 
-        public string GetHostEntry(string domainName)
-        {
-            throw new NotImplementedException();
-        }
-
-        private QuerystringParameters GetCommonParameters()
+        private QuerystringParameters StartParametersForCommand(string command)
         {
             return new QuerystringParameters()
             {
                 {"apiuser", _username},
                 {"username", _username},
                 {"apikey", _apiKey},
-                {"ClientIp", "127.0.0.1"}
+                {"ClientIp", "127.0.0.1"},
+                {"Command", command}
             };
+        }
+
+        private static void AddSDLandTLDParameters(string hostname, QuerystringParameters querystringParameters)
+        {
+            var pieces = PartsOfDNSRecord.ExtractFromHostname(hostname);
+
+            querystringParameters.Add("SLD", pieces.SecondLevelDomain);
+            querystringParameters.Add("TLD", pieces.TopLevelDomain);
         }
     }
 }

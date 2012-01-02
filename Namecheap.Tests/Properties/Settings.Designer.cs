@@ -25,7 +25,7 @@ namespace Namecheap.Tests.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("derp.de")]
+        [global::System.Configuration.DefaultSettingValueAttribute("fschwiettest.com")]
         public string TestBaseDomain {
             get {
                 return ((string)(this["TestBaseDomain"]));
