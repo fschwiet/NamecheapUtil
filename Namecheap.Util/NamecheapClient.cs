@@ -30,7 +30,7 @@ namespace Namecheap.Util
             querystringParameters.Add("TTL1", "180");
             querystringParameters.Add("EmailType", "OX"); // ?
 
-            var result = GetApiResult(querystringParameters);
+            GetApiResult(querystringParameters);
         }
 
         public string GetHostEntry(string hostname)
@@ -42,7 +42,7 @@ namespace Namecheap.Util
 
             var result = GetApiResult(querystringParameters);
 
-            var ns = XNamespace.Get("http://api.namecheap.com/xml.response");
+            var ns = GetNamecheapNamespace();
 
             var commandResponse = result.Root.Elements(ns + "CommandResponse").Single();
             var getHostsResult = commandResponse.Elements(ns + "DomainDNSGetHostsResult").Single();
@@ -50,6 +50,11 @@ namespace Namecheap.Util
             var host = hosts.Where(h => h.Attribute("Name").Value == subdomain).Single();
 
             return host.Attribute("Address").Value;
+        }
+
+        private static XNamespace GetNamecheapNamespace()
+        {
+            return XNamespace.Get("http://api.namecheap.com/xml.response");
         }
 
         private XDocument GetApiResult(QuerystringParameters querystringParameters)
@@ -67,9 +72,27 @@ namespace Namecheap.Util
                 result = XDocument.Parse(response);
                 var value = result.Root.Attribute("Status").Value;
 
-                //if (value != "OK")
-                //    throw new Exception("Namecheap service call failed");
+                if (value == "ERROR")
+                {
+                    var ns = GetNamecheapNamespace();
+                    var seperator = "";
+                    var message = "";
+                    foreach(var error in result.Root.Elements(ns + "Errors").SelectMany(e => e.Elements(ns + "Error")))
+                    {
+                        message = message + seperator 
+                            + String.Format("Error reported by Namecheap webservice ({0}): {1}", 
+                                error.Attribute("Number").Value,
+                                error.Value);
+
+                        seperator = ", ";
+                    }
+                    
+                    throw new Exception(message);
+                }
+                else if (value != "OK")
+                    throw new Exception("Namecheap service call failed");
             }
+
             return result;
         }
 

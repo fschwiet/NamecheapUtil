@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 using Namecheap.Util;
 using NJasmine;
 
@@ -29,6 +30,19 @@ namespace Namecheap.Tests
                     arrange(() => namecheapClient.SetHostEntry(domainName, secondIPAddress));
 
                     then_hostname_has_IPAddress(namecheapClient, domainName, secondIPAddress);
+                });
+            });
+
+            when("we assign to a hostname that isn't ours", delegate()
+            {
+                var exception = arrange(() => Assert.Throws<Exception>(delegate()
+                {
+                    namecheapClient.SetHostEntry("this.is.not.our.domain", "192.168.0.1");
+                }));
+
+                then("the exception tells us the errorcode", delegate()
+                {
+                    expect(() => exception.Message == "Error reported by Namecheap webservice (2019166): Domain name not found");
                 });
             });
         }
