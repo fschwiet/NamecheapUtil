@@ -40,7 +40,8 @@ namespace Namecheap.Tests
 
                 arrange(delegate()
                 {
-                    arrange(() => namecheapClient.SetHostEntry(GetUniqueDomainName(), "192.168.0.10"));
+                    for(var i = 0; i < 500; i++)
+                        arrange(() => namecheapClient.SetHostEntry(GetUniqueDomainName(), "192.168.0.10"));
                 });
 
                 var lastDomainName = GetUniqueDomainName();
