@@ -34,6 +34,26 @@ namespace Namecheap.Tests
                 });
             });
 
+            when("we assign 500 hostnames", delegate()
+            {
+                ignoreBecause("this test takes a long time.");
+
+                arrange(delegate()
+                {
+                    arrange(() => namecheapClient.SetHostEntry(GetUniqueDomainName(), "192.168.0.10"));
+                });
+
+                var lastDomainName = GetUniqueDomainName();
+                var expectedLastIPAddress = "192.168.0.11";
+
+                arrange(() => namecheapClient.SetHostEntry(lastDomainName, expectedLastIPAddress));
+
+                describe("the assignments complete, and we can still set more", delegate()
+                {
+                    then_hostname_has_IPAddress(namecheapClient, lastDomainName, expectedLastIPAddress);
+                });
+            });
+
             when("we assign to a hostname that isn't ours", delegate()
             {
                 var exception = arrange(() => Assert.Throws<Exception>(delegate()
